@@ -50,8 +50,27 @@ public class GentlyDownTheStream {
     // TODO - return a list with the first 2 elements of a sorted list of fruits
     // Add proper validation and exception handling
     public List<String> sortedFruitsFirstTwo() throws InvalidDataException {
-        // Implement with validation, null checks, and exception handling
-        return null;
+        try {
+            validateCollection(fruits, "Fruits collection");
+
+            List<String> result = fruits.stream()
+                    .filter(Objects::nonNull)
+                    .sorted()
+                    .limit(2)
+                    .collect(Collectors.toList());
+
+            if (result.isEmpty()) {
+                throw new InvalidDataException("No valid fruits found after filtering nulls");
+            }
+
+            return result;
+        } catch (EmptyCollectionException e) {
+            throw new InvalidDataException("Cannot retrieve first two fruits: " + e.getMessage(), e);
+        } catch (InvalidDataException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InvalidDataException("Failed to get first two sorted fruits: " + e.getMessage(), e);
+        }
     }
 
     // TODO - return a comma separated String of sorted fruits
