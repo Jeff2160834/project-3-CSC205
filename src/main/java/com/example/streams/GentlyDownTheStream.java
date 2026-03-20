@@ -28,15 +28,20 @@ public class GentlyDownTheStream {
      * Returns a sorted list of fruits with comprehensive error checking
      */
     public List<String> sortedFruits() throws InvalidDataException {
+        // Null check throws IllegalArgumentException BEFORE the try/catch
+        if (fruits == null) {
+            throw new IllegalArgumentException("Fruits collection cannot be null");
+        }
         try {
             validateCollection(fruits, "Fruits collection");
-
             return fruits.stream()
-                    .filter(Objects::nonNull) // Handle potential null elements
+                    .filter(Objects::nonNull)
                     .sorted()
                     .collect(Collectors.toList());
+        } catch (EmptyCollectionException e) {
+            throw new InvalidDataException("Failed to sort fruits: " + e.getMessage(), e);
         } catch (Exception e) {
-            throw new InvalidDataException("Failed to sort fruits: " + e.getMessage());
+            throw new InvalidDataException("Failed to sort fruits: " + e.getMessage(), e);
         }
     }
 
