@@ -106,3 +106,27 @@ How can we optimize my current test method to pass this exception?]"
   }]. What's the best exception handling strategy? Should I use checked or unchecked exceptions?"]"
 *
 
+/**
+* AI GENERATION DOCUMENTATION
+* ===========================
+* AI Tool Used: [Claude Sonnet 4.6]]
+* Generation Date: [3-22-2026]
+*
+* Original Prompt:
+* "[This test [@Test @DisplayName("Should handle empty collections appropriately") void shouldHandleEmptyCollections() {     
+* // Test empty collection behavior     assertThatThrownBy(() -> {         GentlyDownTheStream emptyStream = new GentlyDownTheStream();         
+* emptyStream.fruits = List.of(); // Empty list         emptyStream.sortedFruits();     }).isInstanceOf(EmptyCollectionException.class)             
+* .hasMessageContaining("cannot be empty"); }]  
+* I have within the test.java is failing to pass for this code [public List<String> sortedFruits() throws InvalidDataException {
+  // Null check throws IllegalArgumentException BEFORE the try/catch
+  if (fruits == null) {
+  throw new IllegalArgumentException("Fruits collection cannot be null");
+  }
+  try {
+  validateCollection(fruits, "Fruits collection");
+  return fruits.stream()                 .filter(Objects::nonNull)                 .sorted()                 .collect(Collectors.toList());     } 
+* catch (EmptyCollectionException e) {         throw new InvalidDataException("Failed to sort fruits: " + e.getMessage(), e);     } catch (Exception e) 
+* {         throw new InvalidDataException("Failed to sort fruits: " + e.getMessage(), e);     } }]
+* 
+  How can we optimize this code to pass this null test?]"
+
