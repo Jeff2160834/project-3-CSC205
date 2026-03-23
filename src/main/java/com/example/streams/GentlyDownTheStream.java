@@ -27,19 +27,22 @@ public class GentlyDownTheStream {
      * Example method showing proper exception handling and validation
      * Returns a sorted list of fruits with comprehensive error checking
      */
-    public List<String> sortedFruits() throws InvalidDataException {
-        // Null check throws IllegalArgumentException BEFORE the try/catch
+    public List<String> sortedFruits() throws InvalidDataException, EmptyCollectionException {
+        // Unchecked — null is always a caller bug
         if (fruits == null) {
             throw new IllegalArgumentException("Fruits collection cannot be null");
         }
+
+        // Checked — empty is recoverable, but let EmptyCollectionException through directly
+        if (fruits.isEmpty()) {
+            throw new EmptyCollectionException("Fruits collection cannot be empty");
+        }
+
         try {
-            validateCollection(fruits, "Fruits collection");
             return fruits.stream()
                     .filter(Objects::nonNull)
                     .sorted()
                     .collect(Collectors.toList());
-        } catch (EmptyCollectionException e) {
-            throw new InvalidDataException("Failed to sort fruits: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new InvalidDataException("Failed to sort fruits: " + e.getMessage(), e);
         }
